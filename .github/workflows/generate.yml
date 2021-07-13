@@ -24,7 +24,6 @@ jobs:
         shell: bash
         run: |
           sudo rm /etc/apt/sources.list.d/github_git-lfs.list 
-          sudo rm /etc/apt/sources.list.d/github_git-lfs.list.save
       - name: setup
         run: |
           export QMK_HOME='~/qmk_firmware
