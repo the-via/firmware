@@ -34,7 +34,7 @@ jobs:
           qmk setup -y
           ls ~/qmk_firmware
           qmk compile -kb wilba_tech/wt60_d -km via
-#          qmk multibuild -km via -j 4
+          qmk multibuild -km via -j 4
           
       - name: Package assets
         run: |
