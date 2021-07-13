@@ -25,14 +25,18 @@ jobs:
         shell: bash
         run: |
           sudo rm /etc/apt/sources.list.d/github_git-lfs.list 
-      - name: setup
+      - name: Setup and Build
+        continue-on-error: true
         run: |
           export QMK_HOME='~/qmk_firmware'
           pip install milc
           python3 -m pip install --user qmk
           qmk setup -y
           qmk compile -kb wilba_tech/wt60_d -km via
-          qmk multibuild -km via -j 4
+#          qmk multibuild -km via -j 4
+          
+      - name: Package assets
+        run: |
           mkdir ~/qmk_firmware/firmware
           find ~/qmk_firmware -name "*.hex" -exec mv '{}' ~/qmk_firmware/firmware \;
           find ~/qmk_firmware -name "*.bin" -exec mv '{}' ~/qmk_firmware/firmware \;
