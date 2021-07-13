@@ -27,7 +27,7 @@ jobs:
           sudo rm /etc/apt/sources.list.d/github_git-lfs.list 
       - name: setup
         run: |
-          export QMK_HOME='~/qmk_firmware
+          export QMK_HOME='~/qmk_firmware'
           pip install milc
           python3 -m pip install --user qmk
           qmk setup -y
