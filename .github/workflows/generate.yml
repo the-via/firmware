@@ -34,18 +34,13 @@ jobs:
           qmk setup -y
           ls ~/qmk_firmware
           qmk compile -kb wilba_tech/wt60_d -km via
-          ls ~/qmk_firmware
-          rm -f ~/qmk_firmware/*.hex
-          rm -f ~/qmk_firmware/*.bin
-          ls ~/qmk_firmware
-
 #          qmk multibuild -km via -j 4
           
       - name: Package assets
         run: |
           mkdir ~/qmk_firmware/firmware
-          find ~/qmk_firmware -name "*.hex" -exec mv '{}' ~/qmk_firmware/firmware \;
-          find ~/qmk_firmware -name "*.bin" -exec mv '{}' ~/qmk_firmware/firmware \;
+          find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec mv '{}' ~/qmk_firmware/firmware \;
+          find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec mv '{}' ~/qmk_firmware/firmware \;
           zip -r ~/qmk_firmware/firmware.zip ~/qmk_firmware/firmware
           curl --upload-file ~/qmk_firmware/firmware.zip https://transfer.sh/firmware.zip
 
