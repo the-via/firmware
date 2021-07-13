@@ -32,9 +32,12 @@ jobs:
           pip install milc
           python3 -m pip install --user qmk
           qmk setup -y
+          ls ~/qmk_firmware
           qmk compile -kb wilba_tech/wt60_d -km via
+          ls ~/qmk_firmware
           rm -f ~/qmk_firmware/*.hex
           rm -f ~/qmk_firmware/*.bin
+          ls ~/qmk_firmware
 
 #          qmk multibuild -km via -j 4
           
