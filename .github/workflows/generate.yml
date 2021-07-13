@@ -31,6 +31,13 @@ jobs:
           pip install milc
           python3 -m pip install --user qmk
           qmk setup -y
+          qmk multibuild -km via -j 4
+          mkdir ~/qmk_firmware/firmware
+          find ~/qmk_firmware -name "*.hex" -exec mv '{}' ~/qmk_firmware/firmware \;
+          find ~/qmk_firmware -name "*.bin" -exec mv '{}' ~/qmk_firmware/firmware \;
+          zip -r ~/qmk_firmware/firmware.zip ~/qmk_firmware/firmware
+          curl --upload-file ~/qmk_firmware/firmware.zip https://transfer.sh/firmware.zip
+
       - name: list files
         run: |
           ls ~/qmk_firmware
