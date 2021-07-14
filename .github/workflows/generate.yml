@@ -65,8 +65,6 @@ jobs:
       - name: Package assets
         run: |
           mkdir ~/qmk_firmware/firmware
-          find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec mv '{}' $GITHUB_WORKSPACE \;
-          find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec mv '{}' $GITHUB_WORKSPACE \;
           find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec mv '{}' ~/qmk_firmware/firmware \;
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec mv '{}' ~/qmk_firmware/firmware \;
           cd ~/qmk_firmware/firmware && zip -r ~/qmk_firmware/firmware.zip ./
