@@ -7,6 +7,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  prid: ${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -48,7 +51,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: Add report file
-          title: '[Sync] VIA Firmware #${{GITHUB_RUN_ID}}'
+          title: '[Sync] VIA Firmware #${{env.prid}}'
           body: >
             This PR is auto-generated
           labels: automated-sync
