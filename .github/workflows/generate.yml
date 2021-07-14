@@ -59,6 +59,7 @@ jobs:
           body: >
             This PR is auto-generated
           labels: automated-sync
+          reviewers: wilba,olivia
 
       - name: Package assets
         run: |
