@@ -28,6 +28,7 @@ jobs:
         shell: bash
         run: |
           sudo rm /etc/apt/sources.list.d/github_git-lfs.list 
+          
       - name: Setup and Build
         continue-on-error: true
         run: |
@@ -46,12 +47,16 @@ jobs:
           find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec \cp '{}' $GITHUB_WORKSPACE \;
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec \cp '{}' $GITHUB_WORKSPACE \;
           ls $GITHUB_WORKSPACE
+          
+      - name: Set Release Date
+        run: |
+          echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: Add report file
-          title: '[Sync] VIA Firmware #${{env.prid}}'
+          title: '[Sync] VIA Firmware as of ${{env.RELEASE_DATE}}'
           body: >
             This PR is auto-generated
           labels: automated-sync
