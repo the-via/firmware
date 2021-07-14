@@ -69,7 +69,7 @@ jobs:
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec mv '{}' $GITHUB_WORKSPACE \;
           find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec mv '{}' ~/qmk_firmware/firmware \;
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec mv '{}' ~/qmk_firmware/firmware \;
-          cd ~/qmk_firmware/firmware && zip -r ~/qmk_firmware/firmware.zip ./*
+          cd ~/qmk_firmware/firmware && zip -r ~/qmk_firmware/firmware.zip ./
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v2.2.4
