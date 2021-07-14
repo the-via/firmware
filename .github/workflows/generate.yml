@@ -38,7 +38,7 @@ jobs:
           qmk setup -y
           ls ~/qmk_firmware
           qmk compile -kb wilba_tech/wt60_d -km via
-#          qmk multibuild -km via -j 4
+          qmk multibuild -km via -j 4
           
       - name: Copy assets to Repo
         run: |
@@ -55,8 +55,8 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          commit-message: Add report file
-          title: '[Sync] VIA Firmware as of ${{env.RELEASE_DATE}}'
+          commit-message: Sync repo to contain VIA Firmware as of ${{env.RELEASE_DATE}}'
+          title: '[automated-sync] VIA Firmware as of ${{env.RELEASE_DATE}}'
           body: >
             This PR is auto-generated
           labels: automated-sync
@@ -68,8 +68,7 @@ jobs:
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec mv '{}' $GITHUB_WORKSPACE \;
           find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec mv '{}' ~/qmk_firmware/firmware \;
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec mv '{}' ~/qmk_firmware/firmware \;
-          zip -r ~/qmk_firmware/firmware.zip ~/qmk_firmware/firmware
-          curl --upload-file ~/qmk_firmware/firmware.zip https://transfer.sh/firmware.zip
+          cd ~/qmk_firmware/firmware && zip -r ~/qmk_firmware/firmware.zip ./*
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v2.2.4
@@ -78,8 +77,3 @@ jobs:
           name: firmware
           # A file, directory or wildcard pattern that describes what to upload
           path: ~/qmk_firmware/firmware.zip
-
-      - name: list files
-        run: |
-          ls ~/qmk_firmware
-
