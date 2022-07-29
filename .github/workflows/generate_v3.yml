@@ -34,8 +34,8 @@ jobs:
           python3 -m pip install --user qmk
           qmk setup -y -b via_protocol_11 wilba/qmk_firmware
           ls ~/qmk_firmware
-          qmk compile -kb wilba_tech/wt60_d -km via
-        # qmk multibuild -km via -j 4
+          # qmk compile -kb wilba_tech/wt60_d -km via
+          qmk multibuild -km via -j 4
           
       - name: Copy assets to Repo
         run: |
