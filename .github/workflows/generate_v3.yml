@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Generate Firmwares
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Fix 402 error
+      - name: remove git-lfs
+        continue-on-error: true
+        shell: bash
+        run: |
+          sudo rm /etc/apt/sources.list.d/github_git-lfs.list 
+          
+      - name: Setup and Build
+        continue-on-error: true
+        run: |
+          export QMK_HOME='~/qmk_firmware'
+          pip install milc
+          python3 -m pip install --user qmk
+          qmk setup -y
+          ls ~/qmk_firmware
+          qmk compile -kb wilba_tech/wt60_d -km via
+        # qmk multibuild -km via -j 4
+          
+      - name: Copy assets to Repo
+        run: |
+          rm -f $GITHUB_WORKSPACE/*.hex
+          rm -f $GITHUB_WORKSPACE/*.bin
+          find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec \cp '{}' $GITHUB_WORKSPACE \;
+          find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec \cp '{}' $GITHUB_WORKSPACE \;
+          ls $GITHUB_WORKSPACE
+          
