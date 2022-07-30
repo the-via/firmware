@@ -55,5 +55,5 @@ jobs:
         with:
           name: Firmware files
           path: |
-            /**/*.hex
-            /**/*.bin
+             $GITHUB_WORKSPACE/*.hex
+             $GITHUB_WORKSPACE/*.bin
