@@ -34,12 +34,7 @@ jobs:
           python3 -m pip install --user qmk
           qmk setup -y -b via_protocol_11 wilba/qmk_firmware
           ls ~/qmk_firmware
-          # qmk compile -kb custommk/evo70 -km via
-          # qmk compile -kb doio/kb16 -km via
-          qmk compile -kb mt/mt84 -km via
-          qmk compile -kb work_louder/micro -km via
-          qmk compile -kb work_louder/work_board -km via     
-          # qmk multibuild -km via -j 4
+          qmk multibuild -km via -j 4
           
 
       - name: Copy assets to Repo
