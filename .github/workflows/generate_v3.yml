@@ -41,6 +41,7 @@ jobs:
           qmk compile -kb work_louder/work_board -km via     
           # qmk multibuild -km via -j 4
           
+
       - name: Copy assets to Repo
         run: |
           rm -f $GITHUB_WORKSPACE/*.hex
@@ -49,3 +50,10 @@ jobs:
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec \cp '{}' $GITHUB_WORKSPACE \;
           ls $GITHUB_WORKSPACE
           
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Firmware files
+          path: |
+            /**/*.hex
+            /**/*.bin
