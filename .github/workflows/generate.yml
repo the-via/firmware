@@ -45,6 +45,7 @@ jobs:
           rm -f $GITHUB_WORKSPACE/*.bin
           find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec \cp '{}' $GITHUB_WORKSPACE \;
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec \cp '{}' $GITHUB_WORKSPACE \;
+          find ~/qmk_firmware -maxdepth 1 -name "*.uf2" -exec \cp '{}' $GITHUB_WORKSPACE \;
           ls $GITHUB_WORKSPACE
           
       - name: Set Release Date
@@ -67,6 +68,7 @@ jobs:
           mkdir ~/qmk_firmware/firmware
           find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec mv '{}' ~/qmk_firmware/firmware \;
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec mv '{}' ~/qmk_firmware/firmware \;
+          find ~/qmk_firmware -maxdepth 1 -name "*.uf2" -exec mv '{}' ~/qmk_firmware/firmware \;
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v2.2.4
