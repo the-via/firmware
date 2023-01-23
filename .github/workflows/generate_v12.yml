@@ -32,7 +32,7 @@ jobs:
           export QMK_HOME='~/qmk_firmware'
           pip install milc
           python3 -m pip install --user qmk
-          qmk setup -y -b via_protocol_11 wilba/qmk_firmware
+          qmk setup -y -b via_protocol_12 wilba/qmk_firmware
           ls ~/qmk_firmware
           qmk multibuild -km via -j 4
           
