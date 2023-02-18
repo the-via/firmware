@@ -1,0 +1,18 @@
+# This workflow will send an update event to the-via/website so that the firmware page is regenerated
+
+name: Send update event
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dispatch update to repos
+      run: |
+        curl 'https://api.github.com/repos/the-via/website/dispatches' --request POST -H 'Accept: application/vnd.github.everest-preview+json' -H 'Content-Type: application/javascript' -H 'Authorization: Bearer ${{ secrets.PAT }}' --data-raw '{"event_type": "firmware_update", "client_payload": {}}'
