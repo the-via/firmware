@@ -37,7 +37,7 @@ jobs:
           qmk setup -y
           ls ~/qmk_firmware
           qmk compile -kb wilba_tech/wt60_d -km via
-          qmk multibuild -km via -j 4
+          qmk mass-compile -km via -j 4
           
       - name: Copy assets to Repo
         run: |
