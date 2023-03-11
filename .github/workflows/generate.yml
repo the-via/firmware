@@ -62,7 +62,6 @@ jobs:
           body: >
             This PR is auto-generated
           labels: automated-sync
-          team-reviewers: the-via/core
 
       - name: Package assets
         run: |
