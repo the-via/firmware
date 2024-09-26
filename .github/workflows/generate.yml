@@ -71,7 +71,7 @@ jobs:
           find ~/qmk_firmware -maxdepth 1 -name "*.uf2" -exec mv '{}' ~/qmk_firmware/firmware \;
 
       - name: Upload firmware artifact
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v4
         with:
           # Artifact name
           name: firmware
