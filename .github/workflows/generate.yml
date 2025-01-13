@@ -26,8 +26,8 @@ jobs:
         continue-on-error: true
         shell: bash
         run: |
-          sudo rm /etc/apt/sources.list.d/github_git-lfs.list 
-          
+          sudo rm /etc/apt/sources.list.d/github_git-lfs.list
+
       - name: Setup and Build
         continue-on-error: true
         run: |
@@ -35,10 +35,14 @@ jobs:
           pip install milc
           python3 -m pip install --user qmk
           qmk setup -y
+          git clone https://github.com/the-via/qmk_userspace_via.git
+          cd qmk_userspace_via
+          qmk config user.overlay_dir="$(realpath .)"
+          cd ..
           ls ~/qmk_firmware
           qmk compile -kb wilba_tech/wt60_d -km via
           qmk mass-compile -km via -j 4
-          
+
       - name: Copy assets to Repo
         run: |
           rm -f $GITHUB_WORKSPACE/*.hex
@@ -48,7 +52,7 @@ jobs:
           find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec \cp '{}' $GITHUB_WORKSPACE \;
           find ~/qmk_firmware -maxdepth 1 -name "*.uf2" -exec \cp '{}' $GITHUB_WORKSPACE \;
           ls $GITHUB_WORKSPACE
-          
+
       - name: Set Release Date
         run: |
           echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
@@ -58,7 +62,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           commit-message: Sync repo to contain VIA Firmware as of ${{env.RELEASE_DATE}}'
-          title: '[automated-sync] VIA Firmware as of ${{env.RELEASE_DATE}}'
+          title: "[automated-sync] VIA Firmware as of ${{env.RELEASE_DATE}}"
           body: >
             This PR is auto-generated
           labels: automated-sync
