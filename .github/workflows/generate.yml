@@ -21,13 +21,14 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Fix 402 error
-      - name: remove git-lfs
+      - name: Fix Git LFS issue
         continue-on-error: true
         shell: bash
         run: |
-          sudo rm /etc/apt/sources.list.d/github_git-lfs.list 
-          
+          if [ -f /etc/apt/sources.list.d/github_git-lfs.list ]; then
+            sudo rm /etc/apt/sources.list.d/github_git-lfs.list
+          fi
+
       - name: Setup and Build
         continue-on-error: true
         run: |
@@ -35,20 +36,22 @@ jobs:
           pip install milc
           python3 -m pip install --user qmk
           qmk setup -y
+          git clone https://github.com/the-via/qmk_userspace_via.git
+          cd qmk_userspace_via
+          qmk config user.overlay_dir="$(realpath .)"
+          cd ..
           ls ~/qmk_firmware
           qmk compile -kb wilba_tech/wt60_d -km via
-          qmk mass-compile -km via -j 4
-          
-      - name: Copy assets to Repo
+          qmk mass-compile -km via -j 2
+
+      - name: Copy firmware assets to repo
         run: |
-          rm -f $GITHUB_WORKSPACE/*.hex
-          rm -f $GITHUB_WORKSPACE/*.bin
-          rm -f $GITHUB_WORKSPACE/*.uf2
-          find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec \cp '{}' $GITHUB_WORKSPACE \;
-          find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec \cp '{}' $GITHUB_WORKSPACE \;
-          find ~/qmk_firmware -maxdepth 1 -name "*.uf2" -exec \cp '{}' $GITHUB_WORKSPACE \;
+          rm -f $GITHUB_WORKSPACE/*.hex $GITHUB_WORKSPACE/*.bin $GITHUB_WORKSPACE/*.uf2
+          cp ~/qmk_firmware/*.hex $GITHUB_WORKSPACE/
+          cp ~/qmk_firmware/*.bin $GITHUB_WORKSPACE/
+          cp ~/qmk_firmware/*.uf2 $GITHUB_WORKSPACE/
           ls $GITHUB_WORKSPACE
-          
+
       - name: Set Release Date
         run: |
           echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
@@ -57,23 +60,21 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.PAT }}
-          commit-message: Sync repo to contain VIA Firmware as of ${{env.RELEASE_DATE}}'
-          title: '[automated-sync] VIA Firmware as of ${{env.RELEASE_DATE}}'
-          body: >
-            This PR is auto-generated
+          commit-message: Sync repo to contain VIA Firmware as of ${{ env.RELEASE_DATE }}
+          title: "[automated-sync] VIA Firmware as of ${{ env.RELEASE_DATE }}"
+          body: "This PR is auto-generated"
           labels: automated-sync
+          branch: firmware-sync-${{ env.RELEASE_DATE }}
 
-      - name: Package assets
+      - name: Package and upload firmware artifacts
         run: |
-          mkdir ~/qmk_firmware/firmware
-          find ~/qmk_firmware -maxdepth 1 -name "*.hex" -exec mv '{}' ~/qmk_firmware/firmware \;
-          find ~/qmk_firmware -maxdepth 1 -name "*.bin" -exec mv '{}' ~/qmk_firmware/firmware \;
-          find ~/qmk_firmware -maxdepth 1 -name "*.uf2" -exec mv '{}' ~/qmk_firmware/firmware \;
+          mkdir -p ~/qmk_firmware/firmware
+          cp ~/qmk_firmware/*.hex ~/qmk_firmware/firmware/
+          cp ~/qmk_firmware/*.bin ~/qmk_firmware/firmware/
+          cp ~/qmk_firmware/*.uf2 ~/qmk_firmware/firmware/
 
-      - name: Upload firmware artifact
+      - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
         with:
-          # Artifact name
           name: firmware
-          # A file, directory or wildcard pattern that describes what to upload
           path: ~/qmk_firmware/firmware/
