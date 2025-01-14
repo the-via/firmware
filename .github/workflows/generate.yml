@@ -42,7 +42,7 @@ jobs:
           cd ..
           ls ~/qmk_firmware
           qmk compile -kb wilba_tech/wt60_d -km via
-          qmk mass-compile -km via -j 2
+          qmk mass-compile -km via -j 4
 
       - name: Copy firmware assets to repo
         run: |
