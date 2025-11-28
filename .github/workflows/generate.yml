@@ -35,7 +35,7 @@ jobs:
           export QMK_HOME='~/qmk_firmware'
           pip install milc
           python3 -m pip install --user qmk
-          qmk setup -y
+          curl -fsSL https://install.qmk.fm | sh
           git clone https://github.com/the-via/qmk_userspace_via.git
           cd qmk_userspace_via
           qmk config user.overlay_dir="$(realpath .)"
