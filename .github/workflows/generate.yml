@@ -37,7 +37,6 @@ jobs:
           python3 -m pip install --user qmk
           curl -fsSL https://install.qmk.fm | sh
           export PATH="/home/runner/.local/bin:$PATH"
-          cd ~
           git clone https://github.com/the-via/qmk_userspace_via.git
           cd qmk_userspace_via
           qmk config user.overlay_dir="$(realpath .)"
