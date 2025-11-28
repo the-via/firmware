@@ -36,6 +36,14 @@ jobs:
           pip install milc
           python3 -m pip install --user qmk
           curl -fsSL https://install.qmk.fm | sh
+          cd ~
+          git clone https://github.com/the-via/qmk_userspace_via.git
+          cd qmk_userspace_via
+          qmk config user.overlay_dir="$(realpath .)"
+          cd ..
+          ls ~/qmk_firmware
+          qmk compile -kb wilba_tech/wt60_d -km via
+          qmk mass-compile -km via -j 4
           
 
       - name: Copy firmware assets to repo
