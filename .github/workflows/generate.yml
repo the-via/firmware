@@ -36,6 +36,7 @@ jobs:
           pip install milc
           python3 -m pip install --user qmk
           curl -fsSL https://install.qmk.fm | sh
+          cd ~
           git clone https://github.com/the-via/qmk_userspace_via.git
           cd qmk_userspace_via
           qmk config user.overlay_dir="$(realpath .)"
